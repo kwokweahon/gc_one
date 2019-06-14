@@ -1,0 +1,139 @@
+﻿{include file="public/_meta"}
+<title>评论列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 评论管理 <span
+        class="c-gray en">&gt;</span> 评论列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+                                              href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20"><span class="l"><a href="javascript:;" onclick="comment_del_batch(this)"
+                                                               class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> </span> <span
+            class="r"></div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+            <thead>
+            <tr class="text-c">
+                <th width="25"><input type="checkbox" name="" value=""></th>
+                <th width="80">ID</th>
+                <th width="80">评论内容</th>
+                <th width="130">列表名称</th>
+                <th width="75">用户id</th>
+                <th width="60">评分</th>
+                <th width="130">添加时间</th>
+                <th width="120">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {volist name='comment_rows' id='vo'}
+            <tr class="text-c">
+                <td><input type="checkbox" value="{$vo.comment_id}" name="comment_ids[]"></td>
+                <td>{$vo.comment_id}</td>
+                <td>{$vo.content}</td>
+                <td>{$vo.list_title}</td>
+                <td>{$vo.user_id}</td>
+                <td>{$vo.score}</td>
+                <td>{$vo.createtime}</td>
+                <td class="f-14 td-manage"><a style="text-decoration:none" class="ml-5"
+                                              onClick="comment_del(this,'{$vo.comment_id}')"
+                                              href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                </td>
+            </tr>
+            {/volist}
+
+            </tbody>
+        </table>
+        <div style="float: right">{$comment_rows->render()}</div>
+    </div>
+</div>
+{include file="public/_footer"}
+
+<script type="text/javascript">
+    /*资讯-添加*/
+    function article_add(title, url, w, h) {
+        layer_show(title, url, w, h);
+    }
+
+    /*资讯-编辑*/
+    function article_edit(title, url, id, w, h) {
+        layer_show(title, url, w, h);
+    }
+
+    /*资讯-删除*/
+    function comment_del(obj, id) {
+        layer.confirm('确认要删除吗？', function (index) {
+            $.ajax({
+                type: 'POST',
+                url: '/admin/Comment/deleteExe',
+                dataType: 'json',
+                data: {comment_id: id},
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {icon: 1, time: 1000}, function () {
+                            close_windows();
+                        })
+
+                    } else if (data.code == 0) {
+                        layer.msg(data.msg, {icon: 2, time: 1000})
+                    }
+                }
+            });
+        });
+    }
+
+    /*批量删除*/
+    function comment_del_batch(obj) {
+        var ids = get_checkbox_value('comment_ids[]');
+        if (!ids) {
+            layer.msg('请选择要删除的项', {icon: 1, time: 1000});
+        } else {
+            layer.confirm('确认要删除多行数据吗？', function (index) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/admin/Comment/deleteExe',
+                    dataType: 'json',
+                    data: {comment_id: ids},
+                    success: function (data) {
+                        if (data.code == 1) {
+                            layer.msg(data.msg, {icon: 1, time: 1000}, function () {
+                                close_windows();
+                            })
+
+                        } else if (data.code == 0) {
+                            layer.msg(data.msg, {icon: 2, time: 1000})
+                        }
+                    }
+                });
+            });
+        }
+    }
+
+    /*资讯-下架*/
+    function article_stop(obj, id, status) {
+        layer.confirm('确认要下架吗？', function (index) {
+            $.ajax({
+                type: 'POST',
+                url: '/admin/Nav/downExe',
+                dataType: 'json',
+                data: {
+                    nav_id: id,
+                    status: status,
+                },
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {icon: 1, time: 1000}, function () {
+                            close_windows();
+                        })
+
+                    } else if (data.code == 0) {
+                        layer.msg(data.msg, {icon: 2, time: 1000})
+                    }
+                }
+            });
+        });
+    }
+
+
+</script>
+</body>
+</html>

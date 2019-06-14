@@ -1,0 +1,150 @@
+{include file="public/_meta"}
+<title>项目动态列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 项目动态管理 <span
+        class="c-gray en">&gt;</span> 动态列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+                                              href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <form action="/admin/User" method="post">
+        <div class="text-c">
+		</span>
+            <input type="text" name="keyword" placeholder="请输入姓名或手机号" style="width:250px" class="input-text" value="{$param.keyword}">
+            <button class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+        </div>
+    </form>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+            <thead>
+            <tr class="text-c">
+                <th width="40">ID</th>
+                <th width="80">姓名</th>
+                <th width="130">电话</th>
+                <th width="120">邮箱</th>
+                <th width="120">昵称</th>
+                <th width="80">头像</th>
+                <th width="50">性别</th>
+                <th width="50">国籍</th>
+                <th width="60">省份</th>
+                <th width="50">城市</th>
+                <th width="120">注册日期</th>
+            </tr>
+            </thead>
+            <tbody>
+            {volist name='user_rows' id='vo'}
+            <tr class="text-c">
+                <td>{$vo.user_id}</td>
+                <td>{$vo.username}</td>
+                <td>{$vo.mobile}</td>
+                <td>{$vo.mail}</td>
+                <td>{$vo.nickname}</td>
+                <td><img src="{$vo.avatar_url}" width="50" height="50"></td>
+                <td>{$vo.gender_name}</td>
+                <td>{$vo.country}</td>
+                <td>{$vo.province}</td>
+                <td>{$vo.city}</td>
+                <td>{$vo.registertime}</td>
+            </tr>
+            {/volist}
+
+            </tbody>
+        </table>
+        <div style="float: right">{$user_rows->render()}</div>
+    </div>
+</div>
+{include file="public/_footer"}
+
+<script type="text/javascript">
+    /*资讯-添加*/
+    function article_add(title, url, w, h) {
+        layer_show(title, url, w, h);
+    }
+
+    /*资讯-编辑*/
+    function article_edit(title, url, id, w, h) {
+        layer_show(title, url, w, h);
+    }
+
+    function replay(title, url, w, h) {
+        layer_show(title, url, w, h);
+    }
+
+    /*批量删除*/
+    function comment_del_batch(obj) {
+        var ids = get_checkbox_value('comment_ids[]');
+        if (!ids) {
+            layer.msg('请选择要删除的项', {icon: 1, time: 1000});
+        } else {
+            layer.confirm('确认要删除多行数据吗？', function (index) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/admin/Comment/deleteExe',
+                    dataType: 'json',
+                    data: {comment_id: ids},
+                    success: function (data) {
+                        if (data.code == 1) {
+                            layer.msg(data.msg, {icon: 1, time: 1000}, function () {
+                                close_windows();
+                            })
+
+                        } else if (data.code == 0) {
+                            layer.msg(data.msg, {icon: 2, time: 1000})
+                        }
+                    }
+                });
+            });
+        }
+    }
+
+    function job_del(obj, id) {
+        layer.confirm('确认要删除吗？', function (index) {
+            $.ajax({
+                type: 'POST',
+                url: '/admin/Job/deleteExe',
+                dataType: 'json',
+                data: {job_id: id},
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {icon: 1, time: 1000}, function () {
+                            close_windows();
+                        })
+
+                    } else if (data.code == 0) {
+                        layer.msg(data.msg, {icon: 2, time: 1000})
+                    }
+                }
+            });
+        });
+    }
+
+    function job_del_batch(obj) {
+        var ids = get_checkbox_value('job_ids[]');
+        if (!ids) {
+            layer.msg('请选择要删除的项', {icon: 1, time: 1000});
+        } else {
+            layer.confirm('确认要删除多行数据吗？', function (index) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/admin/Job/deleteExe',
+                    dataType: 'json',
+                    data: {job_id: ids},
+                    success: function (data) {
+                        if (data.code == 1) {
+                            layer.msg(data.msg, {icon: 1, time: 1000}, function () {
+                                close_windows();
+                            })
+
+                        } else if (data.code == 0) {
+                            layer.msg(data.msg, {icon: 2, time: 1000})
+                        }
+                    }
+                });
+            });
+        }
+    }
+
+
+</script>
+</body>
+</html>

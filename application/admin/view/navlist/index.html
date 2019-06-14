@@ -1,0 +1,171 @@
+﻿{include file="public/_meta"}
+<title>资讯列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 列表管理 <span
+        class="c-gray en">&gt;</span> 列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+                                              href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <form action="/admin/NavList" method="post">
+    <div class="text-c">
+        <span class="select-box inline">
+		<select name="nav_id" class="select">
+            <option value="">全部</option>
+            {foreach name='nav_rows' item='vo'}
+			<option value="{$key}" {if condition='$param.nav_id==$key'} selected {/if} >{$vo}</option>
+			{/foreach}
+		</select>
+		</span>
+        <input type="text" name="title" id="" placeholder=" 请输入标题" style="width:250px" class="input-text" value="{$param.title}">
+        <button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+    </div>
+    </form>
+    <div class="cl pd-5 bg-1 bk-gray mt-20"><span class="l"><a href="javascript:;" onclick="list_del_batch()"
+                                                               class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a
+            class="btn btn-primary radius" data-title="添加列表" data-href="" onclick="article_add('添加列表','/admin/NavList/add','1000','')"
+            href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加列表</a></span> <span
+            class="r"></span></div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+            <thead>
+            <tr class="text-c">
+                <th width="25"><input type="checkbox" name="" value=""></th>
+                <th width="80">ID</th>
+                <th>标题</th>
+                <th width="80">分类</th>
+                <th width="120">浏览次数</th>
+                <th width="75">点赞次数</th>
+                <th width="130">添加时间</th>
+                <th width="60">状态</th>
+                <th width="120">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {volist name='nav_list_rows' id="vo"}
+            <tr class="text-c">
+                <td><input type="checkbox" value="{$vo.list_id}" name="list_ids[]"></td>
+                <td>{$vo.list_id}</td>
+                <td class="text-l"><u style="cursor:pointer" class="text-primary"
+                                      onClick="list_edit('编辑列表','/admin/Navlist/edit/list_id/{$vo.list_id}','1000','')" title="查看">{$vo.title}</u></td>
+                <td>{$vo.nav_name}</td>
+                <td>{$vo.clickcount}</td>
+                <td>{$vo.zan}</td>
+                <td>{$vo.createtime}</td>
+                <td class="td-status"><span
+                        class="label {if condition='$vo.status==1'}label-success{else /}label-error {/if} radius">{$vo.status_name}</span>
+                </td>
+                <td class="f-14 td-manage"><a style="text-decoration:none"
+                                              onClick="list_stop(this,'{$vo.list_id}','{$vo.status}')"
+                                              href="javascript:;"
+                                              title="{if condition='$vo.status==1'}下架{else /}上架 {/if}"><i
+                        class="Hui-iconfont">{if condition='$vo.status==1'}&#xe6de;{else /}&#xe6dc; {/if}</i></a> <a
+                        style="text-decoration:none" class="ml-5"
+                        onClick="list_edit('编辑列表','/admin/Navlist/edit/list_id/{$vo.list_id}','1000','')"
+                        href="javascript:;" title="编辑"><i
+                        class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5"
+                                                                 onClick="list_del(this,'{$vo.list_id}')"
+                                                                 href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                </td>
+            </tr>
+            {/volist}
+            </tbody>
+        </table>
+        <div style="float: right">{$nav_list_rows->render()}</div>
+    </div>
+</div>
+{include file="public/_footer"}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLIC__/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+
+<script type="text/javascript">
+
+
+    /*资讯-添加*/
+    function article_add(title, url, w, h) {
+        layer_show(title, url, w, h);
+    }
+
+    /*资讯-编辑*/
+    function list_edit(title, url, w, h) {
+        layer_show(title, url, w, h);
+    }
+
+    /*资讯-删除*/
+    function list_del(obj, id) {
+        layer.confirm('确认要删除吗？', function (index) {
+            $.ajax({
+                type: 'POST',
+                url: '/admin/Navlist/deleteExe',
+                dataType: 'json',
+                data: {list_id: id},
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {icon: 1, time: 1000}, function () {
+                            close_windows();
+                        })
+
+                    } else if (data.code == 0) {
+                        layer.msg(data.msg, {icon: 2, time: 1000})
+                    }
+                }
+            });
+        });
+    }
+
+    /*批量删除*/
+    function list_del_batch(obj) {
+        var ids = get_checkbox_value('list_ids[]');
+        if (!ids) {
+            layer.msg('请选择要删除的项', {icon: 1, time: 1000});
+        } else {
+            layer.confirm('确认要删除多行数据吗？', function (index) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/admin/Navlist/deleteExe',
+                    dataType: 'json',
+                    data: {list_id: ids},
+                    success: function (data) {
+                        if (data.code == 1) {
+                            layer.msg(data.msg, {icon: 1, time: 1000}, function () {
+                                close_windows();
+                            })
+
+                        } else if (data.code == 0) {
+                            layer.msg(data.msg, {icon: 2, time: 1000})
+                        }
+                    }
+                });
+            });
+        }
+    }
+
+    /*资讯-下架*/
+    function list_stop(obj, id, status) {
+        layer.confirm('确认要下架吗？', function (index) {
+            $.ajax({
+                type: 'POST',
+                url: '/admin/Navlist/downExe',
+                dataType: 'json',
+                data: {
+                    list_id: id,
+                    status: status,
+                },
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {icon: 1, time: 1000}, function () {
+                            close_windows();
+                        })
+
+                    } else if (data.code == 0) {
+                        layer.msg(data.msg, {icon: 2, time: 1000})
+                    }
+                }
+            });
+        });
+    }
+
+</script>
+</body>
+</html>

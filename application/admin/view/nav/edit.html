@@ -1,0 +1,81 @@
+{include file="public/_meta"}
+
+<title>编辑栏目</title>
+</head>
+<body>
+<article class="page-container">
+  <form class="form form-horizontal" id="form-article-add">
+    <div class="row cl">
+      <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>栏目名称：</label>
+      <div class="formControls col-xs-8 col-sm-9">
+        <input type="hidden" value="{$nav.nav_id}" name="nav_id" id="nav_id">
+        <input type="text" class="input-text" value="{$nav.nav_name}" placeholder="请输入栏目标题" id="nav_name" name="nav_name">
+      </div>
+    </div>
+
+    <div class="row cl">
+      <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+        <button onClick="article_save_submit();" class="btn btn-primary radius" ><i class="Hui-iconfont">&#xe632;</i> 保存并提交审核</button>
+        <button onClick="removeIframe();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </form>
+</article>
+
+{include file="public/_footer"}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLIC__/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/webuploader/0.1.5/webuploader.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="__PUBLIC__/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        //表单验证
+        $("#form-article-add").validate({
+            rules:{
+                nav_name:{
+                    required:true,
+                },
+            },
+            onkeyup:false,
+            focusCleanup:true,
+            success:"valid",
+            submitHandler:function(form){
+                //$(form).ajaxSubmit();
+                var index = parent.layer.getFrameIndex(window.name);
+                //parent.$('.btn-refresh').click();
+                //parent.layer.close(index);
+            }
+        });
+    });
+
+    function article_save_submit() {
+        var nav_id = $('#nav_id').val();
+        var nav_name = $('#nav_name').val();
+
+        $.ajax({
+            type:"post",
+            url:"/admin/nav/editExe",
+            data:{nav_id:nav_id,nav_name:nav_name},
+            success:function(data){
+                if(data.code==1){
+                    layer.msg(data.msg,{icon:1,time:1000},function () {
+                        close_parent_windows();
+                    })
+
+                }else if(data.code==0){
+                    layer.msg(data.msg,{icon:2,time:1000})
+                }
+            }
+        });
+    }
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

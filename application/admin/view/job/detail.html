@@ -1,0 +1,82 @@
+{include file="public/_meta"}
+
+<title>添加列表</title>
+</head>
+<body>
+<article class="page-container">
+    <form class="form form-horizontal" id="form-article-add">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">项目名称：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {$job_row.jobname}
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">已完成工作：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {$job_row.jobready}
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">未完成工作：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {$job_row.jobnone}
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">需要协调工作：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {$job_row.jobneed}
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">回复处理：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {$job_row.jobreplay}
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">用户名：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {$job_row.user_name}
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">状态：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {$job_row.status_name}
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">提交时间：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {$job_row.createtime}
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-2 col-sm-offset-3">
+                <button onClick="removeIframe();" class="btn btn-default radius" type="button">&nbsp;&nbsp;关闭&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </form>
+</article>
+
+{include file="public/_footer"}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLIC__/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/webuploader/0.1.5/webuploader.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="__PUBLIC__/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

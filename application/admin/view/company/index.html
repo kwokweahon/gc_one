@@ -1,0 +1,141 @@
+{include file="public/_meta"}
+
+<title>编辑系统</title>
+</head>
+<body>
+<article class="page-container">
+    <div class="form form-horizontal">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">公司名称：</label>
+            <div class="formControls col-xs-8 col-sm-5">
+                <input type="hidden" value="{$company_row.company_id}" name="company_id" id="company_id">
+                <input type="text" class="input-text" value="{$company_row.company_name}" placeholder="请输入公司名称"
+                       id="company_name" name="company_name">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">公司负责人：</label>
+            <div class="formControls col-xs-8 col-sm-5">
+                <input type="text" class="input-text" value="{$company_row.company_charge_person}"
+                       placeholder="请输入公司负责人" id="company_charge_person" name="company_charge_person">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">公司电话：</label>
+            <div class="formControls col-xs-8 col-sm-5">
+                <input type="text" class="input-text" value="{$company_row.company_tel}"
+                       placeholder="请输入公司电话：020-XXXXXXXXX" id="company_tel" name="company_tel">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">公司手机：</label>
+            <div class="formControls col-xs-8 col-sm-5">
+                <input type="text" class="input-text" value="{$company_row.company_mobile}"
+                       placeholder="请输入公司手机：1XXXXXXXXXX" id="company_mobile" name="company_mobile">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">公司传真：</label>
+            <div class="formControls col-xs-8 col-sm-5">
+                <input type="text" class="input-text" value="{$company_row.company_fax}"
+                       placeholder="请输入传真" id="company_fax" name="company_fax">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">公司地址邮件：</label>
+            <div class="formControls col-xs-8 col-sm-5">
+                <input type="text" class="input-text" value="{$company_row.company_mail}"
+                       placeholder="请输入公司电子邮件" id="company_mail" name="company_mail">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">公司qq：</label>
+            <div class="formControls col-xs-8 col-sm-5">
+                <input type="text" class="input-text" value="{$company_row.company_qq}"
+                       placeholder="请输入公司qq" id="company_qq" name="company_qq">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">公司微信：</label>
+            <div class="formControls col-xs-8 col-sm-5">
+                <input type="text" class="input-text" value="{$company_row.company_wechat}"
+                       placeholder="请输入公司微信" id="company_wechat" name="company_wechat">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">公司简介：</label>
+            <div class="formControls col-xs-8 col-sm-5">
+                <input type="text" class="input-text" value="{$company_row.company_brief_intr}"
+                       placeholder="请输入公司简介" id="company_brief_intr" name="company_brief_intr">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">公司经营范围：</label>
+            <div class="formControls col-xs-8 col-sm-5">
+                <input type="text" class="input-text" value="{$company_row.company_bus_scope}"
+                       placeholder="请输入经营范围" id="company_bus_scope" name="company_bus_scope">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <button onClick="company_save_submit();" class="btn btn-primary radius"><i
+                        class="Hui-iconfont">&#xe632;</i> 保存
+                </button>
+            </div>
+        </div>
+    </div>
+</article>
+
+{include file="public/_footer"}
+
+<!--请在下方写此页面业务相关的脚本-->
+
+<script type="text/javascript">
+
+    function company_save_submit() {
+        var company_id = $('#company_id').val();
+        var company_name = $('#company_name').val();
+        var company_charge_person = $('#company_charge_person').val();
+        var company_tel = $('#company_tel').val();
+        var company_mobile = $('#company_mobile').val();
+        var company_fax = $('#company_fax').val();
+        var company_mail = $('#company_mail').val();
+        var company_qq = $('#company_qq').val();
+        var company_wechat = $('#company_wechat').val();
+        var company_brief_intr = $('#company_brief_intr').val();
+        var company_bus_scope = $('#company_bus_scope').val();
+
+        $.ajax({
+            type: "post",
+            url: "/admin/Company/editExe",
+            data: {
+                company_id: company_id,
+                company_name: company_name,
+                company_charge_person: company_charge_person,
+                company_tel: company_tel,
+                company_mobile: company_mobile,
+                company_fax: company_fax,
+                company_mail: company_mail,
+                company_qq: company_qq,
+                company_wechat: company_wechat,
+                company_brief_intr: company_brief_intr,
+                company_bus_scope: company_bus_scope,
+
+            },
+            success: function (data) {
+                if (data.code == 1) {
+                    layer.msg(data.msg, {icon: 1, time: 1000}, function () {
+                        window.location.reload();
+                    })
+
+                } else if (data.code == 0) {
+                    layer.msg(data.msg, {icon: 2, time: 1000})
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
